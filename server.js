@@ -36,10 +36,12 @@ io.on('connection', (socket) => {
   });  
   socket.on('disconnect', () => {
     let user = db.users.find(user => user.id === socket.id);
-    let userIndex = db.users.indexOf(user);
-    db.users.splice(userIndex, 1);
-    socket.broadcast.emit('manageUser', {author: 'Chat Bot', content: `${user.name} has left the conversation!`});
-    console.log('Oh, socket ' + socket.id + ' has left')
+    if(user) {
+      let userIndex = db.users.indexOf(user);
+      db.users.splice(userIndex, 1);
+      socket.broadcast.emit('manageUser', { author: 'Chat Bot', content: `${user.name} has left the conversation!` });
+      console.log('Oh, socket ' + socket.id + ' has left')
+    }
   });
 
   console.log('I\'ve added a listener on message event \n');
